@@ -1,11 +1,14 @@
 package com.example.myapplication;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import com.lge.display.DisplayManagerHelper;
 import com.lge.display.DisplayManagerHelper.CoverDisplayCallback;
 import com.lge.display.DisplayManagerHelper.SmartCoverCallback;
 
 import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -45,16 +48,17 @@ public class MainActivity extends AppCompatActivity
         foldView = (TextView) findViewById(R.id.text_box1);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void onClickButton(View v)
     {
         mainView.setText("The button was pressed.");
 
+        Intent intent = new Intent();
+        int targetDisplayId = mDisplayManagerHelper.getCoverDisplayId();
 
-
-//        ActivityOptions options = ActivityOptions.makeBasic();
-//        options.launchDisplayId = targetDisplay.displayId;
-//        startActivity(intent, options.toBundle());
-
+        ActivityOptions options = ActivityOptions.makeBasic();
+        options.setLaunchDisplayId(targetDisplayId);
+        startActivity(intent, options.toBundle());
     }
 
     @Override
@@ -128,6 +132,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+
     private class MySmartCoverCallback extends SmartCoverCallback
     {
         @Override
